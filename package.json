@@ -3,8 +3,17 @@
   "version": "0.1.0",
   "description": "Mirror Aside Browser transcripts into a ccusage pi-format store so `ccusage daily` includes an \"aside\" agent",
   "type": "module",
-  "bin": { "aside-ccusage": "./aside-ccusage.mjs" },
-  "files": ["aside-ccusage.mjs", "README.md"],
-  "engines": { "node": ">=18" },
+  "bin": {
+    "aside-ccusage": "./aside-ccusage.mjs",
+    "usage-window": "./usage-window.mjs"
+  },
+  "files": [
+    "aside-ccusage.mjs",
+    "usage-window.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT"
 }

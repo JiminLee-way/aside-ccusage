@@ -181,4 +181,12 @@ for (const [agent, a] of Object.entries(out.agents).sort((x, y) => y[1].totalTok
   for (const [m, r] of Object.entries(a.models).sort((x, y) => (y[1].input + y[1].output + y[1].cacheRead) - (x[1].input + x[1].output + x[1].cacheRead))) line('   ' + m, r);
 }
 line('TOTAL', out.total);
+// compact summary (agent, model families, total tokens, cost, share of cost)
+console.log('\n' + 'agent (models)'.padEnd(60) + 'total tokens'.padStart(16) + 'cost (USD)'.padStart(12) + 'share'.padStart(7));
+const agentsSorted = Object.entries(out.agents).sort((x, y) => y[1].cost - x[1].cost);
+for (const [agent, a] of agentsSorted) {
+  const fams = [...new Set(Object.keys(a.models).map(m => m.replace(/ \(.*\)$/, '').replace(/^claude-/, '').replace(/^gpt-/, 'gpt-')))].slice(0, 4).join(', ');
+  console.log(`${(agent + ' (' + fams + ')').padEnd(60)}${fmt(a.totalTokens).padStart(16)}${('$' + a.cost.toFixed(2)).padStart(12)}${(out.total.cost ? (100 * a.cost / out.total.cost).toFixed(1) + '%' : '-').padStart(7)}`);
+}
+console.log(`${'TOTAL'.padEnd(60)}${fmt(out.total.totalTokens).padStart(16)}${('$' + out.total.cost.toFixed(2)).padStart(12)}`);
 console.log('\ncost: Aside = its own stored per-call estimate; Claude Code / Codex = token-priced with ccusage\'s models.dev rates incl. the OpenAI long-context tier. "*" = some calls had no pricing entry.');
